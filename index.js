@@ -3,6 +3,13 @@ const morgan = require('morgan'); //middleware
 
 const app = express();
 
+//SETTINGS
+app.set('appName', 'Express Aprendizaje');
+app.set('port',2000);
+app.set('view engine','ejs');
+//app.set('example','Juan') establece propiedades que pueden ser leidas por app.get('example');
+
+//MIDDLEWARES
 app.use(express.json());
 app.use(morgan('dev'));  //Muetra por consola la petición de lo que llega desde la web
 
@@ -10,6 +17,11 @@ app.use(morgan('dev'));  //Muetra por consola la petición de lo que llega desde
 //     console.log('Ruta usuarios');
 //     next();
 // });
+
+app.get('/', (req,res)=>{
+    const data = [{"name":"Juan","edad":29,ciudad:"Aguachica"},{"name":"Jaime","edad":32,ciudad:"Valledupar"},{"name":"Roxana","edad":31,ciudad:"Aguachica"}];
+    res.render('index.ejs', {people: data});
+})
 
 app.get('/user',(req, res) =>{
     res.json({
@@ -42,7 +54,8 @@ app.delete('/user/:userId',(req, res) =>{
 
 app.use(express.static('public')); //middleware para traer archivos
 
-app.listen(3000, ()=>{
-    console.log("Server on port 3000");
+app.listen(app.get('port'), ()=>{
+    console.log(app.get('appName'));
+    console.log("Server on port ", app.get('port'));
 });
 
